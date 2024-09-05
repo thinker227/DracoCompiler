@@ -1,0 +1,22 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.Frozen;
+
+namespace Draco.Compiler.Internal.Syntax;
+
+internal static partial class RedGreenAssociations
+{
+    private static FrozenDictionary<Type, Type> GreenToRed { get; } = new Dictionary<Type, Type>()
+    {
+        {{for $node in Nodes}}
+            [typeof({{$node.Name}})] = typeof(Api.Syntax.{{$node.Name}}),
+        {{end}}
+    }.ToFrozenDictionary();
+
+    private static FrozenDictionary<Type, Type> RedToGreen { get; } = new Dictionary<Type, Type>()
+    {
+        {{for $node in Nodes}}
+            [typeof(Api.Syntax.{{$node.Name}})] = typeof({{$node.Name}}),
+        {{end}}
+    }.ToFrozenDictionary();
+}
